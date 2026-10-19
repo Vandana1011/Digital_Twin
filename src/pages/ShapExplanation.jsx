@@ -107,7 +107,9 @@ export const ShapExplanation = () => {
               {predictedClassLabel}
             </span>
             <span className='text-xs font-mono text-slate-400'>
-              Signed Hyperplane Margin: <strong className='text-slate-200'>{decisionMargin > 0 ? `+${decisionMargin}` : decisionMargin}</strong>
+              Signed Hyperplane Margin: <strong className='text-slate-200'>{Number.isFinite(decisionMargin)
+                ? (decisionMargin > 0 ? `+${decisionMargin}` : decisionMargin)
+                : 'Unavailable'}</strong>
             </span>
           </div>
 
