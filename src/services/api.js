@@ -1,7 +1,5 @@
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-export const USE_REAL_BACKEND = false;
-
-const simulateDelay = (ms = 400) => new Promise((resolve) => setTimeout(resolve, ms));
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/v1';
+export const USE_REAL_BACKEND = true;
 
 export const MODEL_EVALUATION_METRICS = {
   accuracy: 88.5,
@@ -36,11 +34,7 @@ export const MODEL_EVALUATION_METRICS = {
     { fpr: 1.00, tpr: 1.00, baseline: 1.00 },
   ],
   crossValidationFolds: [
-    { fold: 'Fold 1', accuracy: 89.2, f1: 0.89, rocAuc: 0.965 },
-    { fold: 'Fold 2', accuracy: 86.9, f1: 0.87, rocAuc: 0.952 },
-    { fold: 'Fold 3', accuracy: 88.5, f1: 0.89, rocAuc: 0.968 },
-    { fold: 'Fold 4', accuracy: 85.2, f1: 0.86, rocAuc: 0.948 },
-    { fold: 'Fold 5', accuracy: 88.5, f1: 0.89, rocAuc: 0.971 },
+    { fold: '5-Fold Mean', accuracy: 85.46, accuracyStd: 3.42, f1: 0.8392, rocAuc: 0.9046 },
   ],
 };
 
@@ -168,8 +162,8 @@ export const CLINICAL_FEATURE_DEFINITIONS = {
   },
 };
 
-const LOCAL_STORAGE_KEY = 'cardiotwin_assessment_history_v1';
-const LATEST_ASSESSMENT_KEY = 'cardiotwin_latest_assessment_v1';
+const LOCAL_STORAGE_KEY = 'cardiotwin_assessment_history_v2';
+const LATEST_ASSESSMENT_KEY = 'cardiotwin_latest_assessment_v2';
 
 export const apiService = {
   getEvaluationMetrics() {
@@ -221,246 +215,69 @@ export const apiService = {
   },
 
   async predictHeartDisease(patientData) {
-    if (USE_REAL_BACKEND) {
-      const response = await fetch(`${API_BASE_URL}/heart/predict`, {
+    const toNumber = (key) => {
+      const value = Number(patientData[key]);
+      if (!Number.isFinite(value)) throw new Error(`Please enter a valid value for ${CLINICAL_FEATURE_DEFINITIONS[key]?.label || key}.`);
+      return value;
+    };
+    const payload = {
+      age: toNumber('age'), sex: toNumber('sex'), cp: toNumber('cp') + 1,
+      trestbps: toNumber('trestbps'), chol: toNumber('chol'), fbs: toNumber('fbs'),
+      restecg: toNumber('restecg'), thalach: toNumber('thalach'), exang: toNumber('exang'),
+      oldpeak: toNumber('oldpeak'), slope: toNumber('slope') + 1, ca: toNumber('ca'),
+      thal: ({ 1: 3, 2: 6, 3: 7 })[toNumber('thal')],
+    };
+    if (!payload.thal) throw new Error('Please select a valid thal category.');
+
+    let response;
+    try {
+      response = await fetch(`${API_BASE_URL}/predictions/heart-disease?include_explanation=true`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(patientData),
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload),
       });
-      const data = await response.json();
-      this.saveAssessmentToHistory(data);
-      return data;
+    } catch {
+      throw new Error(`Could not reach the CardioTwin API at ${API_BASE_URL}. Start the backend, then try again.`);
+    }
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      const detail = Array.isArray(body.detail) ? body.detail.map((item) => item.msg).join('; ') : body.detail;
+      throw new Error(detail || `Prediction request failed (${response.status}).`);
     }
 
-    await simulateDelay(500);
-
-    const age = Number(patientData.age) || 54;
-    const sex = String(patientData.sex ?? '1');
-    const cp = String(patientData.cp ?? '0');
-    const trestbps = Number(patientData.trestbps) || 130;
-    const chol = Number(patientData.chol) || 240;
-    const fbs = String(patientData.fbs ?? '0');
-    const restecg = String(patientData.restecg ?? '0');
-    const thalach = Number(patientData.thalach) || 150;
-    const exang = String(patientData.exang ?? '0');
-    const oldpeak = Number(patientData.oldpeak) || 1.0;
-    const slope = String(patientData.slope ?? '0');
-    const ca = Number(patientData.ca) || 0;
-    const thal = String(patientData.thal ?? '1');
-
-    // Mathematical representation of the trained SVC hyperplane decision function
-    // Base intercept calibrated to UCI training split
-    let decisionMargin = -0.15;
-
-    // Feature standardized contributions (SVC weights)
-    const shapCalculations = [];
-
-    // 1. ca: major vessels (0 to 3) - strong positive correlation with presence
-    const caShap = (ca * 0.58) - 0.22;
-    decisionMargin += caShap;
-    shapCalculations.push({
-      featureKey: 'ca',
-      featureName: 'Major Vessels (CA)',
-      valueDisplay: `${ca} vessel(s)`,
-      shapValue: Number(caShap.toFixed(3)),
-      direction: caShap >= 0 ? 'positive' : 'negative',
-      clinicalNote: ca > 0 ? `${ca} fluoroscopy-positive vessel(s) significantly elevated decision score` : 'Clean coronary arteries (0 vessels) provided protective offset',
+    const allShapFeatures = (body.explanation || []).map((item) => {
+      const definition = CLINICAL_FEATURE_DEFINITIONS[item.feature] || {};
+      const rawValue = String(patientData[item.feature] ?? '');
+      const displayValue = definition.options?.[rawValue] || rawValue || '—';
+      const contribution = Number(item.shap_contribution);
+      const direction = contribution > 0 ? 'positive' : contribution < 0 ? 'negative' : 'neutral';
+      const target = contribution > 0 ? 'original UCI target 1' : 'original UCI target 0';
+      return {
+        featureKey: item.feature,
+        featureName: definition.label || item.feature,
+        valueDisplay: displayValue,
+        shapValue: contribution,
+        direction,
+        clinicalNote: contribution === 0
+          ? 'This feature had zero contribution to the displayed decision score for this explanation.'
+          : `This contribution moves the model decision score toward ${target}; it does not describe medical causation.`,
+      };
     });
-
-    // 2. oldpeak: ST depression - strong positive correlation
-    const oldpeakShap = (oldpeak - 1.05) * 0.46;
-    decisionMargin += oldpeakShap;
-    shapCalculations.push({
-      featureKey: 'oldpeak',
-      featureName: 'ST Depression (Oldpeak)',
-      valueDisplay: `${oldpeak.toFixed(1)} mm`,
-      shapValue: Number(oldpeakShap.toFixed(3)),
-      direction: oldpeakShap >= 0 ? 'positive' : 'negative',
-      clinicalNote: oldpeak >= 1.5 ? 'Marked exertional repolarization delay (>1.5mm) shifted model toward Class 1' : 'Minimal ST depression (<1.0mm) exerted negative attribution',
-    });
-
-    // 3. thalach: maximum heart rate - protective when high, positive when low
-    const thalachShap = (150 - thalach) * 0.016;
-    decisionMargin += thalachShap;
-    shapCalculations.push({
-      featureKey: 'thalach',
-      featureName: 'Max Heart Rate (Thalach)',
-      valueDisplay: `${thalach} bpm`,
-      shapValue: Number(thalachShap.toFixed(3)),
-      direction: thalachShap >= 0 ? 'positive' : 'negative',
-      clinicalNote: thalach < 130 ? 'Low peak exercise heart rate suggests chronotropic limitation' : 'High chronotropic reserve exerted protective negative contribution',
-    });
-
-    // 4. thal: thallium scintigraphy (1: normal, 2: fixed, 3: reversible)
-    const thalScore = thal === '3' ? 0.48 : thal === '2' ? 0.18 : -0.38;
-    decisionMargin += thalScore;
-    shapCalculations.push({
-      featureKey: 'thal',
-      featureName: 'Thallium Scintigraphy (Thal)',
-      valueDisplay: CLINICAL_FEATURE_DEFINITIONS.thal.options[thal] || thal,
-      shapValue: Number(thalScore.toFixed(3)),
-      direction: thalScore >= 0 ? 'positive' : 'negative',
-      clinicalNote: thal === '3' ? 'Reversible perfusion defect strongly pushed model toward Class 1' : thal === '1' ? 'Normal myocardial perfusion acted as protective factor' : 'Fixed defect indicates previous localized scarring',
-    });
-
-    // 5. exang: exercise induced angina (1: yes, 0: no)
-    const exangShap = exang === '1' ? 0.38 : -0.28;
-    decisionMargin += exangShap;
-    shapCalculations.push({
-      featureKey: 'exang',
-      featureName: 'Exercise-Induced Angina',
-      valueDisplay: exang === '1' ? 'Present' : 'Absent',
-      shapValue: Number(exangShap.toFixed(3)),
-      direction: exangShap >= 0 ? 'positive' : 'negative',
-      clinicalNote: exang === '1' ? 'Exertional thoracic pain indicated exertional ischemia' : 'Absence of exertional angina contributed negatively',
-    });
-
-    // 6. cp: chest pain type (0: typical, 1: atypical, 2: non-anginal, 3: asymptomatic)
-    const cpShap = cp === '3' ? 0.35 : cp === '0' ? 0.05 : -0.25;
-    decisionMargin += cpShap;
-    shapCalculations.push({
-      featureKey: 'cp',
-      featureName: 'Chest Pain Type (CP)',
-      valueDisplay: CLINICAL_FEATURE_DEFINITIONS.cp.options[cp] || cp,
-      shapValue: Number(cpShap.toFixed(3)),
-      direction: cpShap >= 0 ? 'positive' : 'negative',
-      clinicalNote: cp === '3' ? 'Asymptomatic presentation in dataset correlates with occult CAD' : 'Atypical/non-anginal symptoms reduced probability score',
-    });
-
-    // 7. sex: biological sex
-    const sexShap = sex === '1' ? 0.22 : -0.24;
-    decisionMargin += sexShap;
-    shapCalculations.push({
-      featureKey: 'sex',
-      featureName: 'Biological Sex',
-      valueDisplay: sex === '1' ? 'Male' : 'Female',
-      shapValue: Number(sexShap.toFixed(3)),
-      direction: sexShap >= 0 ? 'positive' : 'negative',
-      clinicalNote: sex === '1' ? 'Male sex baseline weighting' : 'Female sex baseline weighting',
-    });
-
-    // 8. age
-    const ageShap = (age - 54) * 0.014;
-    decisionMargin += ageShap;
-    shapCalculations.push({
-      featureKey: 'age',
-      featureName: 'Patient Age',
-      valueDisplay: `${age} yrs`,
-      shapValue: Number(ageShap.toFixed(3)),
-      direction: ageShap >= 0 ? 'positive' : 'negative',
-      clinicalNote: age > 60 ? 'Age-related vascular baseline increase' : 'Younger cohort age provided negative weighting',
-    });
-
-    // 9. slope: ST slope
-    const slopeShap = slope === '1' ? 0.25 : slope === '2' ? 0.15 : -0.28;
-    decisionMargin += slopeShap;
-    shapCalculations.push({
-      featureKey: 'slope',
-      featureName: 'Slope of Peak ST',
-      valueDisplay: CLINICAL_FEATURE_DEFINITIONS.slope.options[slope] || slope,
-      shapValue: Number(slopeShap.toFixed(3)),
-      direction: slopeShap >= 0 ? 'positive' : 'negative',
-      clinicalNote: slope === '1' ? 'Flat ST slope reflects impaired repolarization reserve' : slope === '0' ? 'Normal upsloping ST segment acted as protective negative factor' : 'Downsloping ST segment indicates ischemic vector',
-    });
-
-    // 10. trestbps: resting blood pressure
-    const trestbpsShap = (trestbps - 130) * 0.006;
-    decisionMargin += trestbpsShap;
-    shapCalculations.push({
-      featureKey: 'trestbps',
-      featureName: 'Resting Blood Pressure',
-      valueDisplay: `${trestbps} mmHg`,
-      shapValue: Number(trestbpsShap.toFixed(3)),
-      direction: trestbpsShap >= 0 ? 'positive' : 'negative',
-      clinicalNote: trestbps > 140 ? 'Systolic hypertension added mild positive attribution' : 'Normotensive resting BP provided negative offset',
-    });
-
-    // 11. chol: cholesterol
-    const cholShap = (chol - 240) * 0.003;
-    decisionMargin += cholShap;
-    shapCalculations.push({
-      featureKey: 'chol',
-      featureName: 'Serum Cholesterol',
-      valueDisplay: `${chol} mg/dL`,
-      shapValue: Number(cholShap.toFixed(3)),
-      direction: cholShap >= 0 ? 'positive' : 'negative',
-      clinicalNote: chol > 260 ? 'Hypercholesterolemia contributed positive attribution' : 'Desirable lipid level contributed negative attribution',
-    });
-
-    // 12. restecg
-    const restecgShap = restecg === '2' ? 0.18 : restecg === '1' ? 0.12 : -0.15;
-    decisionMargin += restecgShap;
-    shapCalculations.push({
-      featureKey: 'restecg',
-      featureName: 'Resting ECG',
-      valueDisplay: CLINICAL_FEATURE_DEFINITIONS.restecg.options[restecg] || restecg,
-      shapValue: Number(restecgShap.toFixed(3)),
-      direction: restecgShap >= 0 ? 'positive' : 'negative',
-      clinicalNote: restecg !== '0' ? 'Resting ST-T or LVH abnormality added positive attribution' : 'Normal resting ECG yielded negative contribution',
-    });
-
-    // 13. fbs: fasting blood sugar
-    const fbsShap = fbs === '1' ? 0.14 : -0.08;
-    decisionMargin += fbsShap;
-    shapCalculations.push({
-      featureKey: 'fbs',
-      featureName: 'Fasting Blood Sugar',
-      valueDisplay: fbs === '1' ? '> 120 mg/dL' : '<= 120 mg/dL',
-      shapValue: Number(fbsShap.toFixed(3)),
-      direction: fbsShap >= 0 ? 'positive' : 'negative',
-      clinicalNote: fbs === '1' ? 'Hyperglycemia marker added positive contribution' : 'Euglycemic fasting status provided negative contribution',
-    });
-
-    // Sort features by absolute SHAP contribution magnitude to extract top 5
-    const sortedFeatures = [...shapCalculations].sort((a, b) => Math.abs(b.shapValue) - Math.abs(a.shapValue));
-    const topFiveFeatures = sortedFeatures.slice(0, 5);
-
-    // Classification decision threshold for SVC hyperplane: decisionMargin >= 0
-    const predictedClass = decisionMargin >= 0 ? 1 : 0;
-    const predictedClassLabel = predictedClass === 1 
-      ? 'Class 1: Presence of Heart Disease' 
-      : 'Class 0: Absence of Heart Disease';
-
-    const shortExplanation = predictedClass === 1
-      ? 'The Support Vector Classifier placed this feature vector in the Class 1 region (hyperplane margin distance: +' + Math.abs(decisionMargin).toFixed(2) + '). The prediction was primarily driven by positive contributions from ' + topFiveFeatures.filter(f => f.direction === 'positive').map(f => f.featureName).slice(0, 3).join(', ') + '.'
-      : 'The Support Vector Classifier placed this feature vector in the Class 0 region (hyperplane margin distance: -' + Math.abs(decisionMargin).toFixed(2) + '). The prediction was primarily driven by protective negative contributions from ' + topFiveFeatures.filter(f => f.direction === 'negative').map(f => f.featureName).slice(0, 3).join(', ') + '.';
-
     const assessmentResult = {
       id: `CTA-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
-      timestamp: new Date().toISOString(),
-      modelName: 'Support Vector Classifier (SVC)',
-      kernel: 'RBF (Radial Basis Function)',
-      datasetSource: 'UCI Heart Disease Repository (Cleveland Dataset)',
-      predictedClass,
-      predictedClassLabel,
-      decisionMargin: Number(decisionMargin.toFixed(3)),
-      shortExplanation,
-      inputs: {
-        age,
-        sex,
-        cp,
-        trestbps,
-        chol,
-        fbs,
-        restecg,
-        thalach,
-        exang,
-        oldpeak,
-        slope,
-        ca,
-        thal,
-      },
-      allShapFeatures: shapCalculations,
-      topFiveFeatures,
-      evaluationSummary: {
-        accuracy: '88.5%',
-        macroF1: '0.89',
-        rocAuc: '0.961',
-        evaluationSamples: 61,
-      },
-      clinicalDisclaimer: 'Research prototype only — not a clinical diagnosis tool. SHAP values describe mathematical feature attributions in the model, not biological etiology.',
+      timestamp: body.generated_at || new Date().toISOString(),
+      modelName: 'Saved Heart Disease SVC Pipeline',
+      predictedClass: body.prediction,
+      predictedClassLabel: body.label,
+      decisionMargin: Number(body.decision_score),
+      shortExplanation: `${body.label}. The signed decision score is not a probability or diagnosis.`,
+      inputs: { ...patientData },
+      allShapFeatures,
+      topFiveFeatures: allShapFeatures.slice(0, 5),
+      limitations: body.limitations || [],
+      explanationNote: body.note || '',
+      evaluationSummary: { accuracy: '85.46% (5-fold CV mean)', macroF1: '0.8392 (5-fold CV mean)', rocAuc: '0.9046 (5-fold CV mean)' },
     };
-
     this.saveAssessmentToHistory(assessmentResult);
     return assessmentResult;
   },

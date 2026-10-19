@@ -306,7 +306,7 @@ export const ModelPerformance = () => {
               </p>
             </div>
             <div className='text-xs font-mono text-teal-300 bg-teal-500/10 px-2.5 py-1 rounded-lg border border-teal-500/30'>
-              Mean Accuracy: 87.7% ± 1.6%
+              Mean Accuracy: 85.46% ± 3.42%
             </div>
           </div>
 
@@ -317,7 +317,7 @@ export const ModelPerformance = () => {
                 <div className='space-y-1 text-slate-400'>
                   <div className='flex justify-between'>
                     <span>Accuracy:</span>
-                    <strong className='text-cyan-300'>{fold.accuracy}%</strong>
+                    <strong className='text-cyan-300'>{fold.accuracy}%{fold.accuracyStd ? ` ± ${fold.accuracyStd}%` : ''}</strong>
                   </div>
                   <div className='flex justify-between'>
                     <span>F1-Score:</span>
