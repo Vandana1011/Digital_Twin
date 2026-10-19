@@ -1,0 +1,69 @@
+{
+  "experiment": "UCI Cleveland Heart Disease 5-fold stratified cross-validation",
+  "dataset_rows": 303,
+  "input_features": 13,
+  "positive_class_definition": "Original target 1, 2, 3, or 4",
+  "cross_validation": "StratifiedKFold, 5 splits, shuffle=True, random_state=42",
+  "metrics": {
+    "accuracy": {
+      "fold_scores": [
+        0.9016,
+        0.8197,
+        0.8852,
+        0.8167,
+        0.85
+      ],
+      "mean": 0.8546,
+      "std": 0.0342
+    },
+    "precision": {
+      "fold_scores": [
+        0.8929,
+        0.7931,
+        0.8889,
+        0.7857,
+        0.913
+      ],
+      "mean": 0.8547,
+      "std": 0.054
+    },
+    "recall": {
+      "fold_scores": [
+        0.8929,
+        0.8214,
+        0.8571,
+        0.8148,
+        0.75
+      ],
+      "mean": 0.8272,
+      "std": 0.0477
+    },
+    "f1": {
+      "fold_scores": [
+        0.8929,
+        0.807,
+        0.8727,
+        0.8,
+        0.8235
+      ],
+      "mean": 0.8392,
+      "std": 0.0369
+    },
+    "roc_auc": {
+      "fold_scores": [
+        0.9448,
+        0.8571,
+        0.9102,
+        0.9091,
+        0.9018
+      ],
+      "mean": 0.9046,
+      "std": 0.028
+    }
+  },
+  "limitations": [
+    "Small dataset",
+    "Cross-validation is internal validation, not external validation",
+    "Research prototype, not a clinical diagnostic tool"
+  ]
+}
