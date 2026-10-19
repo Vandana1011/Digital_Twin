@@ -117,7 +117,7 @@ export const Footer = () => {
               </li>
               <li className='flex items-center gap-2'>
                 <span className='text-teal-400 font-mono'>Evaluation:</span>
-                <span>88.5% Accuracy • 0.961 ROC-AUC</span>
+                <span>5-Fold CV: 85.46% Accuracy • 0.9046 ROC-AUC</span>
               </li>
               <li className='flex items-center gap-2'>
                 <span className='text-rose-400 font-mono'>Frontend:</span>

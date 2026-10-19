@@ -2,39 +2,25 @@ export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:80
 export const USE_REAL_BACKEND = true;
 
 export const MODEL_EVALUATION_METRICS = {
-  accuracy: 88.5,
-  macroF1: 0.89,
-  rocAuc: 0.961,
-  sampleSize: 61,
+  accuracy: 85.46,
+  accuracyStd: 3.42,
+  macroF1: 0.8392,
+  macroF1Std: 0.0369,
+  rocAuc: 0.9046,
+  rocAucStd: 0.028,
+  sampleSize: 303,
   dataset: 'UCI Cleveland Heart Disease Repository (303 Total Records)',
-  trainSamples: 242,
-  testSamples: 61,
+  validation: '5-fold stratified cross-validation (shuffle=True, random_state=42)',
   modelType: 'Support Vector Classifier (SVC with RBF Kernel)',
   classificationTask: 'Binary Classification (Class 0: Absence vs Class 1: Presence)',
   class0Definition: 'Original UCI target value 0 (Absence of coronary artery disease)',
   class1Definition: 'Original UCI target values 1, 2, 3, and 4 combined (Presence of CAD with >=50% diameter narrowing)',
-  confusionMatrix: {
-    trueNegative: 30,  // Class 0 correctly predicted as Class 0
-    falsePositive: 4,  // Class 0 incorrectly predicted as Class 1
-    falseNegative: 3,  // Class 1 incorrectly predicted as Class 0
-    truePositive: 24,  // Class 1 correctly predicted as Class 1
-    total: 61,
-  },
-  rocCurveData: [
-    { fpr: 0.00, tpr: 0.00, baseline: 0.00 },
-    { fpr: 0.02, tpr: 0.22, baseline: 0.02 },
-    { fpr: 0.03, tpr: 0.48, baseline: 0.03 },
-    { fpr: 0.05, tpr: 0.72, baseline: 0.05 },
-    { fpr: 0.08, tpr: 0.86, baseline: 0.08 },
-    { fpr: 0.11, tpr: 0.92, baseline: 0.11 },
-    { fpr: 0.14, tpr: 0.96, baseline: 0.14 },
-    { fpr: 0.25, tpr: 0.98, baseline: 0.25 },
-    { fpr: 0.42, tpr: 0.99, baseline: 0.42 },
-    { fpr: 0.70, tpr: 1.00, baseline: 0.70 },
-    { fpr: 1.00, tpr: 1.00, baseline: 1.00 },
-  ],
   crossValidationFolds: [
-    { fold: '5-Fold Mean', accuracy: 85.46, accuracyStd: 3.42, f1: 0.8392, rocAuc: 0.9046 },
+    { fold: 'Fold 1', accuracy: 90.16, f1: 0.8929, rocAuc: 0.9448 },
+    { fold: 'Fold 2', accuracy: 81.97, f1: 0.8070, rocAuc: 0.8571 },
+    { fold: 'Fold 3', accuracy: 88.52, f1: 0.8727, rocAuc: 0.9102 },
+    { fold: 'Fold 4', accuracy: 81.67, f1: 0.8000, rocAuc: 0.9091 },
+    { fold: 'Fold 5', accuracy: 85.00, f1: 0.8235, rocAuc: 0.9018 },
   ],
 };
 
@@ -276,7 +262,7 @@ export const apiService = {
       topFiveFeatures: allShapFeatures.slice(0, 5),
       limitations: body.limitations || [],
       explanationNote: body.note || '',
-      evaluationSummary: { accuracy: '85.46% (5-fold CV mean)', macroF1: '0.8392 (5-fold CV mean)', rocAuc: '0.9046 (5-fold CV mean)' },
+      evaluationSummary: { accuracy: '85.46% ± 3.42% (5-fold CV)', macroF1: '0.8392 ± 0.0369 (5-fold CV)', rocAuc: '0.9046 ± 0.0280 (5-fold CV)' },
     };
     this.saveAssessmentToHistory(assessmentResult);
     return assessmentResult;

@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, BookOpen, ShieldAlert, Cpu, Sparkles, Layers, Activity } from 'lucide-react';
 import AnatomicalHeart from '../components/AnatomicalHeart';
 import Button from '../components/Button';
+import { MODEL_EVALUATION_METRICS } from '../services/api';
 
 export const Home = () => {
   return (
@@ -82,16 +83,16 @@ export const Home = () => {
               {/* Evaluation Metrics highlights */}
               <div className='pt-6 border-t border-slate-800/80 grid grid-cols-3 gap-4 text-center lg:text-left'>
                 <div>
-                  <div className='text-2xl font-black font-mono text-cyan-300'>85.46%</div>
-                  <div className='text-xs text-slate-400 font-sans'>Model Accuracy</div>
+                  <div className='text-2xl font-black font-mono text-cyan-300'>{MODEL_EVALUATION_METRICS.accuracy}%</div>
+                  <div className='text-xs text-slate-400 font-sans'>5-Fold CV Accuracy</div>
                 </div>
                 <div>
-                  <div className='text-2xl font-black font-mono text-electric-purple'>0.9046</div>
-                  <div className='text-xs text-slate-400 font-sans'>ROC-AUC Score</div>
+                  <div className='text-2xl font-black font-mono text-electric-purple'>{MODEL_EVALUATION_METRICS.rocAuc}</div>
+                  <div className='text-xs text-slate-400 font-sans'>5-Fold CV ROC-AUC</div>
                 </div>
                 <div>
-                  <div className='text-2xl font-black font-mono text-emerald-400'>0.89</div>
-                  <div className='text-xs text-slate-400 font-sans'>Macro F1-Score</div>
+                  <div className='text-2xl font-black font-mono text-emerald-400'>{MODEL_EVALUATION_METRICS.macroF1}</div>
+                  <div className='text-xs text-slate-400 font-sans'>5-Fold CV F1-Score</div>
                 </div>
               </div>
             </motion.div>
@@ -148,7 +149,7 @@ export const Home = () => {
                 Support Vector Classifier (SVC)
               </h3>
               <p className='text-xs sm:text-sm text-slate-400 leading-relaxed mb-4'>
-                Uses a saved Support Vector Classifier. Reported stratified 5-fold cross-validation means are 85.46% accuracy and 0.9046 ROC-AUC on the UCI dataset; this is research output, not a clinical assessment.
+                Uses the saved Support Vector Classifier (RBF kernel). Its supplied internal 5-fold cross-validation means are 85.46% accuracy, 0.8392 F1-score, and 0.9046 ROC-AUC.
               </p>
               <div className='text-[11px] font-mono text-electric-purple bg-navy-950/80 px-2.5 py-1.5 rounded-lg border border-slate-800 inline-block'>
                 Binary Decision Hyperplane

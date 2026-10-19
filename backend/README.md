@@ -46,7 +46,7 @@ The default CORS allowlist includes `http://localhost:3000` and `http://localhos
 
 Place the supplied model and metadata files in `cardiotwin_artifacts/`. The heart SHAP endpoint also reads `processed.cleveland.data` from that folder. Set `CARDIOTWIN_UCI_DATASET` only if the dataset is stored elsewhere.
 
-The `.joblib` model files are excluded from Git. Ask the ML team member for the exact saved model files and place all three in `cardiotwin_artifacts/`. The diabetes model is about 291 MB, above GitHub's regular file limit, so the team must use an agreed artifact store or Git LFS. Without the model binaries, prediction routes return an unavailable-model response. Metadata JSON files and the UCI background dataset are tracked.
+The saved heart SVC pipeline (`uci_heart_disease_svc_pipeline.joblib`) is included in Git so the heart prediction route can load the existing artifact. The ECG and diabetes `.joblib` files remain excluded until the team agrees how to distribute them. The diabetes model is about 291 MB, above GitHub's regular file limit, so use an agreed artifact store, a GitHub Release asset, or Git LFS for that file. Until their model binaries are supplied, the ECG and diabetes routes return an unavailable-model response. Metadata JSON files and the UCI background dataset are tracked.
 
 The ECG endpoint expects exactly the 13 engineered MLII/V1/RR features documented in `API_CONTRACT.md`. It accepts neither raw wearable files nor a V5 substitute. The frontend or ML preprocessing component must provide that exact feature vector.
 

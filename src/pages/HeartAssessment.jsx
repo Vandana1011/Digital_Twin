@@ -170,7 +170,7 @@ export const HeartAssessment = () => {
       navigate('/results', { state: { assessment: result } });
     } catch (err) {
       console.error('Error generating prediction:', err);
-      setErrors({ form: err.message || 'Could not get a prediction. Please check that the backend is running and try again.' });
+      setErrors({ form: 'An error occurred during model inference. Please try again.' });
     } finally {
       setLoading(false);
     }
