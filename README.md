@@ -1,6 +1,41 @@
 # CardioTwin AI
 
-CardioTwin is an academic research prototype with a React website and a FastAPI service for three independent ML models: heart disease, diabetes survey, and ECG beat classification. The outputs do not form a combined patient risk score and are not medical advice.
+## Project title
+
+**CardioTwin AI — Heart Health Digital Twin Prototype**
+
+## Team and institution
+
+- **Team members:** [Add each member's full name and role]
+- **College/incubator:** [Add the official institution name]
+
+## Problem statement
+
+Health information can be spread across clinical measurements, lifestyle surveys, and wearable signals. This prototype demonstrates how separate machine-learning models can accept those kinds of inputs through a web application and return model outputs for review. The models use different datasets and are not joined to an individual patient's record; the application does not create a unified digital twin or combined risk score.
+
+## Healthcare use case
+
+For an academic demonstration, a user enters synthetic heart-health values in the Heart Assessment page and receives the saved model's dataset-class prediction with optional SHAP feature contributions. The backend also exposes separate diabetes-survey and engineered ECG-beat prediction endpoints through its API. This research prototype is not a clinical decision-support tool, diagnosis, or medical advice. Use synthetic demo values only; do not enter identifiable or real patient data.
+
+## Technical stack
+
+- **Frontend:** React, Vite, JavaScript, HTML, CSS
+- **Backend/API:** Python, FastAPI, Uvicorn
+- **ML/data:** scikit-learn, pandas, NumPy, joblib; SHAP for optional heart-model explanation
+- **Interface:** JSON over HTTP; OpenAPI/Swagger docs at `/docs`
+
+## AI/ML model and framework details
+
+CardioTwin serves three independent saved models: a UCI Cleveland heart-disease classifier (saved SVC pipeline), a diabetes survey classifier, and an ECG beat classifier. The heart endpoint can return Kernel SHAP contributions based on the UCI Cleveland background dataset. The ECG endpoint expects 13 engineered MLII/V1/RR features; it does not process raw wearable waveforms. See [model environment evidence](backend/MODEL_ENVIRONMENT.md) and the [API contract](backend/API_CONTRACT.md) for schemas and version caveats. Model outputs do not combine into a patient-specific score.
+
+## Team and submission links
+
+- **15–20 minute demo video (unlisted YouTube):** [Add the video URL after uploading]
+- **Presentation (PDF/PPT):** [Add a public link to the presentation]
+- **Architecture diagram (PDF/PPT):** [Add a public link to the exported diagram]
+- **Open-source license:** [Choose a license with the team and add its details; no license is currently declared]
+
+> Submission checklist: replace the team, institution, demo, presentation, architecture export, and license placeholders above before submitting. The current repository contains a Mermaid architecture diagram in Markdown, not a PDF/PPT export. Model binaries are not in this repository, so the demo needs the matching artifacts supplied separately as described below. Verify that every linked file is publicly accessible without extra permissions.
 
 ## Run locally
 
