@@ -26,13 +26,14 @@ export const Button = ({
   };
 
   const variantClasses = {
-    primary: 'bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-slate-950 font-semibold shadow-glow-cyan hover:shadow-cyan-500/50 focus-visible:ring-cyan-400',
-    secondary: 'bg-navy-800 hover:bg-navy-750 text-slate-200 border border-slate-700/60 hover:border-cyan-500/40 focus-visible:ring-cyan-500',
-    outline: 'border border-cyan-500/40 hover:border-cyan-400 text-cyan-300 hover:bg-cyan-500/10 focus-visible:ring-cyan-400',
+    primary: 'bg-gradient-to-r from-purple-600 via-fuchsia-600 to-indigo-600 hover:from-purple-500 hover:via-fuchsia-500 hover:to-indigo-500 text-white font-medium shadow-glow-purple hover:shadow-glow-purple-lg focus-visible:ring-purple-400',
+    secondary: 'bg-purple-950/30 hover:bg-purple-900/40 text-purple-200 hover:text-white border border-purple-500/40 hover:border-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.15)] focus-visible:ring-purple-400',
+    outline: 'border border-purple-500/40 hover:border-purple-400 text-purple-200 hover:text-white hover:bg-purple-500/10 shadow-[0_0_12px_rgba(168,85,247,0.15)] focus-visible:ring-purple-400',
+    purple: 'bg-purple-600 hover:bg-purple-500 text-white font-medium shadow-glow-purple focus-visible:ring-purple-400',
     cyan: 'bg-cyan-500 hover:bg-cyan-400 text-navy-950 font-semibold shadow-glow-cyan focus-visible:ring-cyan-400',
     teal: 'bg-teal-500 hover:bg-teal-400 text-navy-950 font-semibold shadow-glow-teal focus-visible:ring-teal-400',
     rose: 'bg-rose-500 hover:bg-rose-400 text-white font-semibold shadow-glow-rose focus-visible:ring-rose-400',
-    ghost: 'text-slate-300 hover:text-white hover:bg-white/5 focus-visible:ring-slate-400',
+    ghost: 'text-slate-300 hover:text-white hover:bg-white/5 focus-visible:ring-purple-400',
   };
 
   const combinedClasses = `${baseClasses} ${sizeClasses[size] || sizeClasses.md} ${variantClasses[variant] || variantClasses.primary} ${className}`;

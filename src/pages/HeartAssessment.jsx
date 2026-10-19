@@ -33,12 +33,12 @@ const defaultFormValues = {
 
 const samplePresets = {
   class1Positive: {
-    label: 'Sample Case: Presence (Class 1)',
+    label: 'Presence (Class 1)',
     description: '62 y/o male, exertional angina, 2.5mm ST depression, 2 vessels',
     data: {
       age: 62,
       sex: '1',
-      cp: '3', // Asymptomatic / silent ischemia
+      cp: '3',
       trestbps: 155,
       chol: 284,
       fbs: '1',
@@ -46,18 +46,18 @@ const samplePresets = {
       thalach: 112,
       exang: '1',
       oldpeak: 2.5,
-      slope: '1', // flat
+      slope: '1',
       ca: 2,
-      thal: '3', // reversible defect
+      thal: '3',
     },
   },
   class0Negative: {
-    label: 'Sample Case: Absence (Class 0)',
+    label: 'Absence (Class 0)',
     description: '44 y/o female, atypical discomfort, clean vessels, normal ECG',
     data: {
       age: 44,
       sex: '0',
-      cp: '1', // atypical
+      cp: '1',
       trestbps: 118,
       chol: 182,
       fbs: '0',
@@ -65,13 +65,13 @@ const samplePresets = {
       thalach: 172,
       exang: '0',
       oldpeak: 0.2,
-      slope: '0', // upsloping
+      slope: '0',
       ca: 0,
-      thal: '1', // normal
+      thal: '1',
     },
   },
   borderline: {
-    label: 'Sample Case: Borderline Hyperplane',
+    label: 'Borderline Hyperplane',
     description: '55 y/o male, moderate cholesterol, mild ST-T changes',
     data: {
       age: 55,
@@ -176,7 +176,6 @@ export const HeartAssessment = () => {
     }
   };
 
-  // Helper tooltip renderer
   const renderTooltip = (key) => {
     const def = CLINICAL_FEATURE_DEFINITIONS[key];
     if (!def) return null;
@@ -187,15 +186,15 @@ export const HeartAssessment = () => {
           onClick={() => setActiveTooltip(activeTooltip === key ? null : key)}
           onMouseEnter={() => setActiveTooltip(key)}
           onMouseLeave={() => setActiveTooltip(null)}
-          className='text-slate-400 hover:text-cyan-400 transition-colors focus:outline-none'
+          className='text-slate-400 hover:text-purple-400 transition-colors focus:outline-none'
           aria-label={`Info about ${def.label}`}
         >
           <HelpCircle className='w-3.5 h-3.5' />
         </button>
 
         {activeTooltip === key && (
-          <div className='absolute z-30 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2.5 rounded-xl bg-navy-900 border border-slate-700 text-slate-200 text-xs shadow-2xl backdrop-blur-xl'>
-            <div className='font-bold text-cyan-300 mb-1'>{def.label}</div>
+          <div className='absolute z-30 bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 rounded-2xl bg-[#070b24] border border-purple-500/30 text-slate-200 text-xs shadow-2xl backdrop-blur-xl'>
+            <div className='font-bold text-purple-300 mb-1'>{def.label}</div>
             <p className='text-[11px] text-slate-300 leading-relaxed'>{def.tooltip}</p>
             {def.normalRange && (
               <div className='mt-1 text-[10px] font-mono text-slate-400'>
@@ -209,28 +208,29 @@ export const HeartAssessment = () => {
   };
 
   return (
-    <div className='flex-1 flex flex-col bg-navy-950 py-8 px-4 sm:px-6 lg:px-8'>
+    <div className='flex-1 flex flex-col bg-[#040614] py-8 px-4 sm:px-6 lg:px-8'>
       <div className='max-w-7xl mx-auto w-full space-y-8'>
-        {/* Top Header */}
-        <div className='flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800/80'>
-          <div className='space-y-1'>
+        <div className='flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-purple-950/60'>
+          <div className='space-y-1.5'>
             <div className='flex items-center gap-2.5'>
-              <div className='p-2 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400'>
+              <div className='p-2 rounded-xl bg-purple-950/50 border border-purple-500/40 text-purple-400 shadow-[0_0_12px_rgba(168,85,247,0.3)]'>
                 <HeartPulse className='w-5 h-5' />
               </div>
               <h1 className='text-2xl sm:text-3xl font-extrabold text-white tracking-tight'>
-                New Heart Assessment
+                Predict Heart Disease Risk
               </h1>
+              <span className='px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-950/50 text-purple-300 border border-purple-500/30'>
+                13 Biomarkers
+              </span>
             </div>
-            <p className='text-xs sm:text-sm text-slate-400'>
-              Provide the 13 clinical biomarkers required by the Support Vector Classifier (SVC) model.
+            <p className='text-xs sm:text-sm text-[#9496b8]'>
+              Provide the 13 clinical biomarkers required by the calibrated Support Vector Classifier (SVC).
             </p>
           </div>
 
-          {/* Quick Presets for Evaluators */}
           <div className='flex flex-wrap items-center gap-2'>
-            <span className='text-xs font-mono text-slate-400 flex items-center gap-1'>
-              <Bookmark className='w-3.5 h-3.5 text-cyan-400' />
+            <span className='text-xs font-mono text-[#9496b8] flex items-center gap-1'>
+              <Bookmark className='w-3.5 h-3.5 text-purple-400' />
               <span>Presets:</span>
             </span>
             {Object.entries(samplePresets).map(([key, item]) => (
@@ -238,10 +238,10 @@ export const HeartAssessment = () => {
                 key={key}
                 type='button'
                 onClick={() => loadPreset(key)}
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-sans transition-colors ${
+                className={`px-3 py-1.5 rounded-full text-xs transition-all ${
                   activePreset === key
-                    ? 'bg-cyan-500/20 text-cyan-200 border border-cyan-500/50 font-semibold'
-                    : 'bg-navy-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700'
+                    ? 'bg-purple-600/30 text-purple-200 border border-purple-400 font-semibold shadow-glow-purple'
+                    : 'bg-[#070b24] border border-purple-500/20 text-[#9496b8] hover:text-white hover:border-purple-500/40'
                 }`}
                 title={item.description}
               >
@@ -251,44 +251,39 @@ export const HeartAssessment = () => {
           </div>
         </div>
 
-        {/* Disclaimer */}
-        <Disclaimer variant='banner' />
+        <Disclaimer />
 
         {errors.form && (
-          <div className='p-3 rounded-xl bg-rose-500/15 border border-rose-500/40 text-rose-300 text-xs flex items-center gap-2'>
+          <div className='p-3.5 rounded-2xl bg-rose-950/40 border border-rose-500/40 text-rose-300 text-xs flex items-center gap-2 shadow-[0_0_15px_rgba(244,63,94,0.2)]'>
             <AlertCircle className='w-4 h-4 text-rose-400 shrink-0' />
             <span>{errors.form}</span>
           </div>
         )}
 
-        {/* The 13 Features Organized in 3 Clean Cards */}
         <form onSubmit={handleSubmit} className='space-y-8'>
           <div className='grid grid-cols-1 lg:grid-cols-3 gap-6 items-start'>
-            
-            {/* Card A: Patient Profile */}
-            <div className='rounded-2xl p-6 bg-navy-900/80 border border-slate-800 shadow-card-glow space-y-5'>
-              <div className='flex items-center gap-2.5 pb-3 border-b border-slate-800'>
-                <div className='p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'>
+            <div className='rounded-3xl p-6 bg-[#070b24]/80 border border-purple-500/20 shadow-card-glow space-y-5 hover:border-purple-500/40 transition-all'>
+              <div className='flex items-center gap-2.5 pb-3 border-b border-purple-950/60'>
+                <div className='p-1.5 rounded-xl bg-purple-950/50 text-purple-400 border border-purple-500/30 shadow-[0_0_10px_rgba(168,85,247,0.2)]'>
                   <User className='w-4 h-4' />
                 </div>
                 <div>
                   <h2 className='text-sm font-bold text-white tracking-tight'>
                     A. Patient Profile
                   </h2>
-                  <p className='text-[11px] text-slate-400'>
+                  <p className='text-[11px] text-[#9496b8]'>
                     Demographic baseline characteristics
                   </p>
                 </div>
               </div>
 
-              {/* Age */}
               <div>
                 <div className='flex items-center justify-between mb-1'>
                   <label htmlFor='age' className='text-xs font-medium text-slate-200 flex items-center'>
                     <span>Age</span>
                     {renderTooltip('age')}
                   </label>
-                  <span className='text-[10px] font-mono text-slate-400'>years</span>
+                  <span className='text-[10px] font-mono text-[#9496b8]'>years</span>
                 </div>
                 <input
                   id='age'
@@ -297,7 +292,7 @@ export const HeartAssessment = () => {
                   max='100'
                   value={formData.age}
                   onChange={(e) => handleInputChange('age', e.target.value)}
-                  className={`w-full bg-navy-950 border ${errors.age ? 'border-rose-500' : 'border-slate-700'} rounded-lg px-3 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-cyan-400 focus:outline-none font-mono`}
+                  className={`w-full bg-navy-950 border ${errors.age ? 'border-rose-500' : 'border-purple-500/25'} rounded-xl px-3.5 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-purple-400 focus:outline-none font-mono transition-all`}
                   required
                 />
                 {errors.age && (
@@ -305,56 +300,53 @@ export const HeartAssessment = () => {
                 )}
               </div>
 
-              {/* Biological Sex */}
               <div>
                 <div className='flex items-center justify-between mb-1'>
                   <label htmlFor='sex' className='text-xs font-medium text-slate-200 flex items-center'>
                     <span>Biological Sex</span>
                     {renderTooltip('sex')}
                   </label>
-                  <span className='text-[10px] font-mono text-slate-400'>binary</span>
+                  <span className='text-[10px] font-mono text-[#9496b8]'>binary</span>
                 </div>
                 <select
                   id='sex'
                   value={formData.sex}
                   onChange={(e) => handleInputChange('sex', e.target.value)}
-                  className='w-full bg-navy-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-cyan-400 focus:outline-none'
+                  className='w-full bg-navy-950 border border-purple-500/25 rounded-xl px-3.5 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-purple-400 focus:outline-none transition-all'
                 >
                   <option value='1'>Male (1)</option>
                   <option value='0'>Female (0)</option>
                 </select>
               </div>
 
-              <div className='p-3 rounded-xl bg-navy-950/60 border border-slate-800/80 text-[11px] text-slate-400 space-y-1'>
-                <span className='font-semibold text-slate-300 block'>Privacy Notice:</span>
-                <p>CardioTwin AI strictly requires only physiological values. No identifying patient names or numbers are stored.</p>
+              <div className='p-3.5 rounded-2xl bg-navy-950/70 border border-purple-500/15 text-[11px] text-[#9496b8] space-y-1'>
+                <span className='font-semibold text-purple-300 block'>Privacy Notice:</span>
+                <p>CardioTwin AI evaluates purely physiological measurements. No identifying clinical records or names are ever retained.</p>
               </div>
             </div>
 
-            {/* Card B: Clinical Measurements */}
-            <div className='rounded-2xl p-6 bg-navy-900/80 border border-slate-800 shadow-card-glow space-y-5'>
-              <div className='flex items-center gap-2.5 pb-3 border-b border-slate-800'>
-                <div className='p-1.5 rounded-lg bg-teal-500/10 text-teal-400 border border-teal-500/20'>
+            <div className='rounded-3xl p-6 bg-[#070b24]/80 border border-purple-500/20 shadow-card-glow space-y-5 hover:border-purple-500/40 transition-all'>
+              <div className='flex items-center gap-2.5 pb-3 border-b border-purple-950/60'>
+                <div className='p-1.5 rounded-xl bg-purple-950/50 text-electric-blue border border-purple-500/30 shadow-[0_0_10px_rgba(0,210,255,0.2)]'>
                   <Activity className='w-4 h-4' />
                 </div>
                 <div>
                   <h2 className='text-sm font-bold text-white tracking-tight'>
                     B. Clinical Measurements
                   </h2>
-                  <p className='text-[11px] text-slate-400'>
+                  <p className='text-[11px] text-[#9496b8]'>
                     Vital signs and laboratory biomarkers
                   </p>
                 </div>
               </div>
 
-              {/* Resting Blood Pressure */}
               <div>
                 <div className='flex items-center justify-between mb-1'>
                   <label htmlFor='trestbps' className='text-xs font-medium text-slate-200 flex items-center'>
                     <span>Resting Blood Pressure</span>
                     {renderTooltip('trestbps')}
                   </label>
-                  <span className='text-[10px] font-mono text-slate-400'>mmHg</span>
+                  <span className='text-[10px] font-mono text-[#9496b8]'>mmHg</span>
                 </div>
                 <input
                   id='trestbps'
@@ -363,7 +355,7 @@ export const HeartAssessment = () => {
                   max='240'
                   value={formData.trestbps}
                   onChange={(e) => handleInputChange('trestbps', e.target.value)}
-                  className={`w-full bg-navy-950 border ${errors.trestbps ? 'border-rose-500' : 'border-slate-700'} rounded-lg px-3 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-cyan-400 focus:outline-none font-mono`}
+                  className={`w-full bg-navy-950 border ${errors.trestbps ? 'border-rose-500' : 'border-purple-500/25'} rounded-xl px-3.5 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-purple-400 focus:outline-none font-mono transition-all`}
                   required
                 />
                 {errors.trestbps && (
@@ -371,14 +363,13 @@ export const HeartAssessment = () => {
                 )}
               </div>
 
-              {/* Serum Cholesterol */}
               <div>
                 <div className='flex items-center justify-between mb-1'>
                   <label htmlFor='chol' className='text-xs font-medium text-slate-200 flex items-center'>
                     <span>Serum Cholesterol</span>
                     {renderTooltip('chol')}
                   </label>
-                  <span className='text-[10px] font-mono text-slate-400'>mg/dL</span>
+                  <span className='text-[10px] font-mono text-[#9496b8]'>mg/dL</span>
                 </div>
                 <input
                   id='chol'
@@ -387,7 +378,7 @@ export const HeartAssessment = () => {
                   max='600'
                   value={formData.chol}
                   onChange={(e) => handleInputChange('chol', e.target.value)}
-                  className={`w-full bg-navy-950 border ${errors.chol ? 'border-rose-500' : 'border-slate-700'} rounded-lg px-3 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-cyan-400 focus:outline-none font-mono`}
+                  className={`w-full bg-navy-950 border ${errors.chol ? 'border-rose-500' : 'border-purple-500/25'} rounded-xl px-3.5 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-purple-400 focus:outline-none font-mono transition-all`}
                   required
                 />
                 {errors.chol && (
@@ -395,34 +386,32 @@ export const HeartAssessment = () => {
                 )}
               </div>
 
-              {/* Fasting Blood Sugar Indicator */}
               <div>
                 <div className='flex items-center justify-between mb-1'>
                   <label htmlFor='fbs' className='text-xs font-medium text-slate-200 flex items-center'>
                     <span>Fasting Blood Sugar</span>
                     {renderTooltip('fbs')}
                   </label>
-                  <span className='text-[10px] font-mono text-slate-400'>&gt; 120 mg/dL</span>
+                  <span className='text-[10px] font-mono text-[#9496b8]'>&gt; 120 mg/dL</span>
                 </div>
                 <select
                   id='fbs'
                   value={formData.fbs}
                   onChange={(e) => handleInputChange('fbs', e.target.value)}
-                  className='w-full bg-navy-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-cyan-400 focus:outline-none'
+                  className='w-full bg-navy-950 border border-purple-500/25 rounded-xl px-3.5 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-purple-400 focus:outline-none transition-all'
                 >
                   <option value='0'>False (&le; 120 mg/dL)</option>
                   <option value='1'>True (&gt; 120 mg/dL)</option>
                 </select>
               </div>
 
-              {/* Maximum Heart Rate Achieved */}
               <div>
                 <div className='flex items-center justify-between mb-1'>
                   <label htmlFor='thalach' className='text-xs font-medium text-slate-200 flex items-center'>
                     <span>Maximum Heart Rate</span>
                     {renderTooltip('thalach')}
                   </label>
-                  <span className='text-[10px] font-mono text-slate-400'>bpm</span>
+                  <span className='text-[10px] font-mono text-[#9496b8]'>bpm</span>
                 </div>
                 <input
                   id='thalach'
@@ -431,7 +420,7 @@ export const HeartAssessment = () => {
                   max='230'
                   value={formData.thalach}
                   onChange={(e) => handleInputChange('thalach', e.target.value)}
-                  className={`w-full bg-navy-950 border ${errors.thalach ? 'border-rose-500' : 'border-slate-700'} rounded-lg px-3 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-cyan-400 focus:outline-none font-mono`}
+                  className={`w-full bg-navy-950 border ${errors.thalach ? 'border-rose-500' : 'border-purple-500/25'} rounded-xl px-3.5 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-purple-400 focus:outline-none font-mono transition-all`}
                   required
                 />
                 {errors.thalach && (
@@ -439,14 +428,13 @@ export const HeartAssessment = () => {
                 )}
               </div>
 
-              {/* Oldpeak ST Depression */}
               <div>
                 <div className='flex items-center justify-between mb-1'>
                   <label htmlFor='oldpeak' className='text-xs font-medium text-slate-200 flex items-center'>
                     <span>ST Depression (Oldpeak)</span>
                     {renderTooltip('oldpeak')}
                   </label>
-                  <span className='text-[10px] font-mono text-slate-400'>mm</span>
+                  <span className='text-[10px] font-mono text-[#9496b8]'>mm</span>
                 </div>
                 <input
                   id='oldpeak'
@@ -456,7 +444,7 @@ export const HeartAssessment = () => {
                   max='7.0'
                   value={formData.oldpeak}
                   onChange={(e) => handleInputChange('oldpeak', e.target.value)}
-                  className={`w-full bg-navy-950 border ${errors.oldpeak ? 'border-rose-500' : 'border-slate-700'} rounded-lg px-3 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-cyan-400 focus:outline-none font-mono`}
+                  className={`w-full bg-navy-950 border ${errors.oldpeak ? 'border-rose-500' : 'border-purple-500/25'} rounded-xl px-3.5 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-purple-400 focus:outline-none font-mono transition-all`}
                   required
                 />
                 {errors.oldpeak && (
@@ -465,36 +453,34 @@ export const HeartAssessment = () => {
               </div>
             </div>
 
-            {/* Card C: Cardiac Assessment */}
-            <div className='rounded-2xl p-6 bg-navy-900/80 border border-slate-800 shadow-card-glow space-y-5'>
-              <div className='flex items-center gap-2.5 pb-3 border-b border-slate-800'>
-                <div className='p-1.5 rounded-lg bg-electric-purple/15 text-electric-purple border border-electric-purple/30'>
+            <div className='rounded-3xl p-6 bg-[#070b24]/80 border border-purple-500/20 shadow-card-glow space-y-5 hover:border-purple-500/40 transition-all'>
+              <div className='flex items-center gap-2.5 pb-3 border-b border-purple-950/60'>
+                <div className='p-1.5 rounded-xl bg-purple-950/50 text-fuchsia-400 border border-purple-500/30 shadow-[0_0_10px_rgba(217,70,239,0.2)]'>
                   <Stethoscope className='w-4 h-4' />
                 </div>
                 <div>
                   <h2 className='text-sm font-bold text-white tracking-tight'>
                     C. Cardiac Assessment
                   </h2>
-                  <p className='text-[11px] text-slate-400'>
+                  <p className='text-[11px] text-[#9496b8]'>
                     Stress test, ECG, and vessel imaging
                   </p>
                 </div>
               </div>
 
-              {/* Chest Pain Type */}
               <div>
                 <div className='flex items-center justify-between mb-1'>
                   <label htmlFor='cp' className='text-xs font-medium text-slate-200 flex items-center'>
                     <span>Chest Pain Type (CP)</span>
                     {renderTooltip('cp')}
                   </label>
-                  <span className='text-[10px] font-mono text-slate-400'>0–3</span>
+                  <span className='text-[10px] font-mono text-[#9496b8]'>0–3</span>
                 </div>
                 <select
                   id='cp'
                   value={formData.cp}
                   onChange={(e) => handleInputChange('cp', e.target.value)}
-                  className='w-full bg-navy-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-cyan-400 focus:outline-none'
+                  className='w-full bg-navy-950 border border-purple-500/25 rounded-xl px-3.5 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-purple-400 focus:outline-none transition-all'
                 >
                   <option value='0'>Typical Angina (0)</option>
                   <option value='1'>Atypical Angina (1)</option>
@@ -503,20 +489,19 @@ export const HeartAssessment = () => {
                 </select>
               </div>
 
-              {/* Resting ECG */}
               <div>
                 <div className='flex items-center justify-between mb-1'>
                   <label htmlFor='restecg' className='text-xs font-medium text-slate-200 flex items-center'>
                     <span>Resting ECG</span>
                     {renderTooltip('restecg')}
                   </label>
-                  <span className='text-[10px] font-mono text-slate-400'>category</span>
+                  <span className='text-[10px] font-mono text-[#9496b8]'>category</span>
                 </div>
                 <select
                   id='restecg'
                   value={formData.restecg}
                   onChange={(e) => handleInputChange('restecg', e.target.value)}
-                  className='w-full bg-navy-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-cyan-400 focus:outline-none'
+                  className='w-full bg-navy-950 border border-purple-500/25 rounded-xl px-3.5 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-purple-400 focus:outline-none transition-all'
                 >
                   <option value='0'>Normal (0)</option>
                   <option value='1'>ST-T Wave Abnormality (1)</option>
@@ -524,40 +509,38 @@ export const HeartAssessment = () => {
                 </select>
               </div>
 
-              {/* Exercise-Induced Angina */}
               <div>
                 <div className='flex items-center justify-between mb-1'>
                   <label htmlFor='exang' className='text-xs font-medium text-slate-200 flex items-center'>
                     <span>Exercise-Induced Angina</span>
                     {renderTooltip('exang')}
                   </label>
-                  <span className='text-[10px] font-mono text-slate-400'>binary</span>
+                  <span className='text-[10px] font-mono text-[#9496b8]'>binary</span>
                 </div>
                 <select
                   id='exang'
                   value={formData.exang}
                   onChange={(e) => handleInputChange('exang', e.target.value)}
-                  className='w-full bg-navy-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-cyan-400 focus:outline-none'
+                  className='w-full bg-navy-950 border border-purple-500/25 rounded-xl px-3.5 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-purple-400 focus:outline-none transition-all'
                 >
                   <option value='0'>No (0)</option>
                   <option value='1'>Yes (1)</option>
                 </select>
               </div>
 
-              {/* Slope */}
               <div>
                 <div className='flex items-center justify-between mb-1'>
                   <label htmlFor='slope' className='text-xs font-medium text-slate-200 flex items-center'>
                     <span>Slope of Peak ST</span>
                     {renderTooltip('slope')}
                   </label>
-                  <span className='text-[10px] font-mono text-slate-400'>category</span>
+                  <span className='text-[10px] font-mono text-[#9496b8]'>category</span>
                 </div>
                 <select
                   id='slope'
                   value={formData.slope}
                   onChange={(e) => handleInputChange('slope', e.target.value)}
-                  className='w-full bg-navy-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-cyan-400 focus:outline-none'
+                  className='w-full bg-navy-950 border border-purple-500/25 rounded-xl px-3.5 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-purple-400 focus:outline-none transition-all'
                 >
                   <option value='0'>Upsloping (0)</option>
                   <option value='1'>Flat (1)</option>
@@ -565,20 +548,19 @@ export const HeartAssessment = () => {
                 </select>
               </div>
 
-              {/* Number of Major Vessels (CA) */}
               <div>
                 <div className='flex items-center justify-between mb-1'>
                   <label htmlFor='ca' className='text-xs font-medium text-slate-200 flex items-center'>
                     <span>Major Vessels (CA)</span>
                     {renderTooltip('ca')}
                   </label>
-                  <span className='text-[10px] font-mono text-slate-400'>0–3 vessels</span>
+                  <span className='text-[10px] font-mono text-[#9496b8]'>0–3 vessels</span>
                 </div>
                 <select
                   id='ca'
                   value={formData.ca}
                   onChange={(e) => handleInputChange('ca', Number(e.target.value))}
-                  className='w-full bg-navy-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-cyan-400 focus:outline-none font-mono'
+                  className='w-full bg-navy-950 border border-purple-500/25 rounded-xl px-3.5 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-purple-400 focus:outline-none font-mono transition-all'
                 >
                   <option value='0'>0 vessels</option>
                   <option value='1'>1 vessel</option>
@@ -587,20 +569,19 @@ export const HeartAssessment = () => {
                 </select>
               </div>
 
-              {/* Thal (Thallium Scintigraphy) */}
               <div>
                 <div className='flex items-center justify-between mb-1'>
                   <label htmlFor='thal' className='text-xs font-medium text-slate-200 flex items-center'>
                     <span>Thallium Stress (Thal)</span>
                     {renderTooltip('thal')}
                   </label>
-                  <span className='text-[10px] font-mono text-slate-400'>category</span>
+                  <span className='text-[10px] font-mono text-[#9496b8]'>category</span>
                 </div>
                 <select
                   id='thal'
                   value={formData.thal}
                   onChange={(e) => handleInputChange('thal', e.target.value)}
-                  className='w-full bg-navy-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-cyan-400 focus:outline-none'
+                  className='w-full bg-navy-950 border border-purple-500/25 rounded-xl px-3.5 py-2 text-sm text-slate-100 focus:ring-2 focus:ring-purple-400 focus:outline-none transition-all'
                 >
                   <option value='1'>Normal (1)</option>
                   <option value='2'>Fixed Defect (2)</option>
@@ -608,18 +589,16 @@ export const HeartAssessment = () => {
                 </select>
               </div>
             </div>
-
           </div>
 
-          {/* Form Actions */}
-          <div className='pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4'>
+          <div className='pt-6 border-t border-purple-950/60 flex flex-col sm:flex-row items-center justify-between gap-4'>
             <button
               type='button'
               onClick={clearForm}
-              className='inline-flex items-center gap-2 text-xs font-medium text-slate-400 hover:text-white transition-colors py-2 px-3 rounded-lg hover:bg-slate-800/60'
+              className='inline-flex items-center gap-2 text-xs font-medium text-[#9496b8] hover:text-white transition-colors py-2.5 px-4 rounded-xl hover:bg-purple-950/30 border border-transparent hover:border-purple-500/30'
             >
               <RotateCcw className='w-4 h-4' />
-              <span>Clear Form</span>
+              <span>Reset to Defaults</span>
             </button>
 
             <div className='flex items-center gap-3 w-full sm:w-auto'>
@@ -629,9 +608,9 @@ export const HeartAssessment = () => {
                 size='lg'
                 loading={loading}
                 icon={Sparkles}
-                className='w-full sm:w-auto shadow-glow-cyan'
+                className='w-full sm:w-auto shadow-glow-purple rounded-full px-8'
               >
-                {loading ? 'Running SVC Inference...' : 'Generate Prediction'}
+                {loading ? 'Running SVC Inference...' : 'Generate AI Risk Prediction'}
               </Button>
             </div>
           </div>

@@ -29,11 +29,13 @@ export const App = () => {
       <Routes>
         <Route path='/' element={<MainLayout />}>
           <Route index element={<Home />} />
-          <Route path='dashboard' element={<Dashboard />} />
+          <Route path='predict' element={<HeartAssessment />} />
           <Route path='assessment' element={<HeartAssessment />} />
-          <Route path='heart' element={<Navigate to='/assessment' replace />} />
-          <Route path='results' element={<PredictionResults />} />
+          <Route path='heart' element={<Navigate to='/predict' replace />} />
+          <Route path='explain' element={<ShapExplanation />} />
           <Route path='shap' element={<ShapExplanation />} />
+          <Route path='dashboard' element={<Dashboard />} />
+          <Route path='results' element={<PredictionResults />} />
           <Route path='performance' element={<ModelPerformance />} />
           <Route path='how-it-works' element={<HowItWorks />} />
           <Route path='about' element={<About />} />

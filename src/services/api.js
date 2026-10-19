@@ -248,14 +248,9 @@ export const apiService = {
     const ca = Number(patientData.ca) || 0;
     const thal = String(patientData.thal ?? '1');
 
-    // Mathematical representation of the trained SVC hyperplane decision function
-    // Base intercept calibrated to UCI training split
     let decisionMargin = -0.15;
-
-    // Feature standardized contributions (SVC weights)
     const shapCalculations = [];
 
-    // 1. ca: major vessels (0 to 3) - strong positive correlation with presence
     const caShap = (ca * 0.58) - 0.22;
     decisionMargin += caShap;
     shapCalculations.push({
@@ -267,7 +262,6 @@ export const apiService = {
       clinicalNote: ca > 0 ? `${ca} fluoroscopy-positive vessel(s) significantly elevated decision score` : 'Clean coronary arteries (0 vessels) provided protective offset',
     });
 
-    // 2. oldpeak: ST depression - strong positive correlation
     const oldpeakShap = (oldpeak - 1.05) * 0.46;
     decisionMargin += oldpeakShap;
     shapCalculations.push({
@@ -279,7 +273,6 @@ export const apiService = {
       clinicalNote: oldpeak >= 1.5 ? 'Marked exertional repolarization delay (>1.5mm) shifted model toward Class 1' : 'Minimal ST depression (<1.0mm) exerted negative attribution',
     });
 
-    // 3. thalach: maximum heart rate - protective when high, positive when low
     const thalachShap = (150 - thalach) * 0.016;
     decisionMargin += thalachShap;
     shapCalculations.push({
@@ -291,7 +284,6 @@ export const apiService = {
       clinicalNote: thalach < 130 ? 'Low peak exercise heart rate suggests chronotropic limitation' : 'High chronotropic reserve exerted protective negative contribution',
     });
 
-    // 4. thal: thallium scintigraphy (1: normal, 2: fixed, 3: reversible)
     const thalScore = thal === '3' ? 0.48 : thal === '2' ? 0.18 : -0.38;
     decisionMargin += thalScore;
     shapCalculations.push({
@@ -303,7 +295,6 @@ export const apiService = {
       clinicalNote: thal === '3' ? 'Reversible perfusion defect strongly pushed model toward Class 1' : thal === '1' ? 'Normal myocardial perfusion acted as protective factor' : 'Fixed defect indicates previous localized scarring',
     });
 
-    // 5. exang: exercise induced angina (1: yes, 0: no)
     const exangShap = exang === '1' ? 0.38 : -0.28;
     decisionMargin += exangShap;
     shapCalculations.push({
@@ -315,7 +306,6 @@ export const apiService = {
       clinicalNote: exang === '1' ? 'Exertional thoracic pain indicated exertional ischemia' : 'Absence of exertional angina contributed negatively',
     });
 
-    // 6. cp: chest pain type (0: typical, 1: atypical, 2: non-anginal, 3: asymptomatic)
     const cpShap = cp === '3' ? 0.35 : cp === '0' ? 0.05 : -0.25;
     decisionMargin += cpShap;
     shapCalculations.push({
@@ -327,7 +317,6 @@ export const apiService = {
       clinicalNote: cp === '3' ? 'Asymptomatic presentation in dataset correlates with occult CAD' : 'Atypical/non-anginal symptoms reduced probability score',
     });
 
-    // 7. sex: biological sex
     const sexShap = sex === '1' ? 0.22 : -0.24;
     decisionMargin += sexShap;
     shapCalculations.push({
@@ -339,7 +328,6 @@ export const apiService = {
       clinicalNote: sex === '1' ? 'Male sex baseline weighting' : 'Female sex baseline weighting',
     });
 
-    // 8. age
     const ageShap = (age - 54) * 0.014;
     decisionMargin += ageShap;
     shapCalculations.push({
@@ -351,7 +339,6 @@ export const apiService = {
       clinicalNote: age > 60 ? 'Age-related vascular baseline increase' : 'Younger cohort age provided negative weighting',
     });
 
-    // 9. slope: ST slope
     const slopeShap = slope === '1' ? 0.25 : slope === '2' ? 0.15 : -0.28;
     decisionMargin += slopeShap;
     shapCalculations.push({
@@ -363,7 +350,6 @@ export const apiService = {
       clinicalNote: slope === '1' ? 'Flat ST slope reflects impaired repolarization reserve' : slope === '0' ? 'Normal upsloping ST segment acted as protective negative factor' : 'Downsloping ST segment indicates ischemic vector',
     });
 
-    // 10. trestbps: resting blood pressure
     const trestbpsShap = (trestbps - 130) * 0.006;
     decisionMargin += trestbpsShap;
     shapCalculations.push({
@@ -375,7 +361,6 @@ export const apiService = {
       clinicalNote: trestbps > 140 ? 'Systolic hypertension added mild positive attribution' : 'Normotensive resting BP provided negative offset',
     });
 
-    // 11. chol: cholesterol
     const cholShap = (chol - 240) * 0.003;
     decisionMargin += cholShap;
     shapCalculations.push({
@@ -387,7 +372,6 @@ export const apiService = {
       clinicalNote: chol > 260 ? 'Hypercholesterolemia contributed positive attribution' : 'Desirable lipid level contributed negative attribution',
     });
 
-    // 12. restecg
     const restecgShap = restecg === '2' ? 0.18 : restecg === '1' ? 0.12 : -0.15;
     decisionMargin += restecgShap;
     shapCalculations.push({
@@ -399,7 +383,6 @@ export const apiService = {
       clinicalNote: restecg !== '0' ? 'Resting ST-T or LVH abnormality added positive attribution' : 'Normal resting ECG yielded negative contribution',
     });
 
-    // 13. fbs: fasting blood sugar
     const fbsShap = fbs === '1' ? 0.14 : -0.08;
     decisionMargin += fbsShap;
     shapCalculations.push({
@@ -411,11 +394,9 @@ export const apiService = {
       clinicalNote: fbs === '1' ? 'Hyperglycemia marker added positive contribution' : 'Euglycemic fasting status provided negative contribution',
     });
 
-    // Sort features by absolute SHAP contribution magnitude to extract top 5
     const sortedFeatures = [...shapCalculations].sort((a, b) => Math.abs(b.shapValue) - Math.abs(a.shapValue));
     const topFiveFeatures = sortedFeatures.slice(0, 5);
 
-    // Classification decision threshold for SVC hyperplane: decisionMargin >= 0
     const predictedClass = decisionMargin >= 0 ? 1 : 0;
     const predictedClassLabel = predictedClass === 1 
       ? 'Class 1: Presence of Heart Disease' 
