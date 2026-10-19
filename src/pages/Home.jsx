@@ -11,8 +11,8 @@ import Button from '../components/Button';
 
 export const Home = () => {
   return (
-    <div className='flex-1 flex flex-col justify-between overflow-hidden bg-[#040614] text-slate-100 min-h-0 relative h-full'>
-      <section className='relative overflow-hidden flex-1 flex flex-col justify-between min-h-0 pt-1 lg:pt-3 h-full'>
+    <div className='flex-1 flex flex-col justify-between bg-[#040614] text-slate-100 relative'>
+      <section className='relative overflow-hidden flex-1 flex flex-col justify-between pt-6 sm:pt-8 lg:pt-12'>
         <div 
           className='absolute top-1/3 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[380px] bg-gradient-to-tr from-purple-700/15 via-indigo-600/10 to-transparent rounded-full blur-[100px] pointer-events-none' 
           aria-hidden='true' 
@@ -26,7 +26,7 @@ export const Home = () => {
           aria-hidden='true' 
         />
 
-        <div className='relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex items-center min-h-0 py-1 sm:py-2'>
+        <div className='relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex items-center py-4 sm:py-6 lg:py-8'>
           <div className='grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center w-full'>
             <motion.div 
               initial={{ opacity: 0, y: 15 }}
@@ -89,7 +89,7 @@ export const Home = () => {
           </div>
         </div>
 
-        <div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 shrink-0 w-full pt-1 pb-1'>
+        <div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 shrink-0 w-full pt-4 pb-2'>
           <div className='relative flex items-center justify-center'>
             <div className='w-full border-t border-purple-500/25' />
             <div className='absolute px-4 bg-[#040614]'>
@@ -99,7 +99,7 @@ export const Home = () => {
             </div>
           </div>
 
-          <div className='flex flex-wrap items-center justify-center gap-2 sm:gap-6 text-xs text-[#9496b8] pt-2 font-medium'>
+          <div className='flex flex-wrap items-center justify-center gap-2 sm:gap-6 text-xs text-[#9496b8] pt-3 font-medium'>
             <span>AI-Powered Insights</span>
             <span className='text-purple-400 font-bold'>•</span>
             <span>Explainable Predictions</span>
@@ -112,7 +112,7 @@ export const Home = () => {
           <img
             src='/cardiotwin-waves-pure.png'
             alt='CardioTwin AI glowing decorative waves'
-            className='w-full h-12 sm:h-16 lg:h-20 xl:h-24 object-cover object-top opacity-90'
+            className='w-full h-14 sm:h-16 lg:h-20 object-cover object-top opacity-90'
             loading='eager'
           />
         </div>
