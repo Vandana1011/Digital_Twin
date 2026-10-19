@@ -1,0 +1,33 @@
+{
+    "model_name": "CardioTwin MIT-BIH ECG Beat Classifier",
+    "model_type": "RandomForestClassifier",
+    "dataset": "MIT-BIH Arrhythmia Database",
+    "sampling_frequency_hz": 360,
+    "input_feature_count": 13,
+    "input_features": [
+        "MLII_mean",
+        "MLII_std",
+        "MLII_min",
+        "MLII_max",
+        "MLII_peak_to_peak",
+        "V1_mean",
+        "V1_std",
+        "V1_min",
+        "V1_max",
+        "V1_peak_to_peak",
+        "rr_interval_seconds",
+        "previous_rr_seconds",
+        "rr_ratio"
+    ],
+    "class_labels": {
+        "N": "Normal beat category",
+        "A": "Atrial premature beat category",
+        "V": "Ventricular premature beat category"
+    },
+    "limitations": [
+        "Experimental ECG beat classification, not a clinical diagnosis",
+        "Minority-class detection remains weak",
+        "Validation record was used during model experimentation",
+        "Input features must be extracted using the same preprocessing pipeline"
+    ]
+}

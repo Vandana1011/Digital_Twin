@@ -1,0 +1,38 @@
+{
+    "model_name": "Random Forest",
+    "dataset": "CDC Diabetes Health Indicators BRFSS 2015",
+    "target": "Diabetes_binary",
+    "selected_threshold": 0.6,
+    "test_metrics": {
+        "accuracy": 0.8002,
+        "precision": 0.3937,
+        "recall": 0.5673,
+        "f1_score": 0.4648,
+        "pr_auc": 0.4324,
+        "roc_auc": 0.8128
+    },
+    "feature_names": [
+        "HighBP",
+        "HighChol",
+        "CholCheck",
+        "BMI",
+        "Smoker",
+        "Stroke",
+        "HeartDiseaseorAttack",
+        "PhysActivity",
+        "Fruits",
+        "Veggies",
+        "HvyAlcoholConsump",
+        "AnyHealthcare",
+        "NoDocbcCost",
+        "GenHlth",
+        "MentHlth",
+        "PhysHlth",
+        "DiffWalk",
+        "Sex",
+        "Age",
+        "Education",
+        "Income"
+    ],
+    "note": "Research prototype using self-reported survey indicators; not a clinical diagnosis."
+}
