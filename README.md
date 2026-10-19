@@ -35,7 +35,7 @@ CardioTwin serves three independent saved models: a UCI Cleveland heart-disease 
 - **Architecture diagram (PDF/PPT):** [Add a public link to the exported diagram]
 - **Open-source license:** [Choose a license with the team and add its details; no license is currently declared]
 
-> Submission checklist: replace the team, institution, demo, presentation, architecture export, and license placeholders above before submitting. The current repository contains a Mermaid architecture diagram in Markdown, not a PDF/PPT export. Model binaries are not in this repository, so the demo needs the matching artifacts supplied separately as described below. Verify that every linked file is publicly accessible without extra permissions.
+> Submission checklist: replace the team, institution, demo, presentation, architecture export, and license placeholders above before submitting. The current repository contains a Mermaid architecture diagram in Markdown, not a PDF/PPT export. The heart model artifact is included; ECG and diabetes model binaries still need separate distribution. Verify that every linked file is publicly accessible without extra permissions.
 
 ## Run locally
 
@@ -66,7 +66,7 @@ Open the Vite URL printed in the terminal, normally `http://localhost:5173/`. Th
 
 ## Model artifacts
 
-Model binaries are not stored in this repository. Ask the ML team member for the matching `.joblib` artifacts and place them in `backend/cardiotwin_artifacts/`. The diabetes pipeline is about 291 MB, above GitHub's regular file limit; the team must distribute it through an agreed artifact store or Git LFS. Do not commit a substitute model or retrain/overwrite the supplied model. The Cleveland SHAP background dataset and model metadata are included in `backend/cardiotwin_artifacts/`.
+The saved heart SVC pipeline is included at `backend/cardiotwin_artifacts/uci_heart_disease_svc_pipeline.joblib` so the deployed heart assessment can load the existing model. The ECG and diabetes model binaries remain excluded until the team agrees how to distribute them; the diabetes pipeline is about 291 MB and exceeds GitHub's regular file limit. Do not commit a substitute model or retrain/overwrite the supplied model. The Cleveland SHAP background dataset and model metadata are also included in `backend/cardiotwin_artifacts/`.
 
 ## Project docs
 

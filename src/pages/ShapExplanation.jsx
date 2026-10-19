@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import Button from '../components/Button';
 import Disclaimer from '../components/Disclaimer';
-import { apiService } from '../services/api';
+import { apiService, CLINICAL_FEATURE_DEFINITIONS } from '../services/api';
 
 export const ShapExplanation = () => {
   const location = useLocation();
@@ -107,7 +107,7 @@ export const ShapExplanation = () => {
               {predictedClassLabel}
             </span>
             <span className='text-xs font-mono text-slate-400'>
-              Decision score (not a probability): <strong className='text-slate-200'>{decisionMargin > 0 ? `+${decisionMargin.toFixed(3)}` : decisionMargin.toFixed(3)}</strong>
+              Signed Hyperplane Margin: <strong className='text-slate-200'>{decisionMargin > 0 ? `+${decisionMargin}` : decisionMargin}</strong>
             </span>
           </div>
 
@@ -115,11 +115,11 @@ export const ShapExplanation = () => {
           <div className='flex items-center gap-4 text-xs font-mono'>
             <div className='flex items-center gap-1.5'>
               <span className='w-3 h-3 rounded bg-rose-500' />
-              <span className='text-slate-300'>Positive contribution (toward original UCI target 1)</span>
+              <span className='text-slate-300'>Positive Contribution (+ toward Class 1)</span>
             </div>
             <div className='flex items-center gap-1.5'>
               <span className='w-3 h-3 rounded bg-cyan-500' />
-              <span className='text-slate-300'>Negative contribution (toward original UCI target 0)</span>
+              <span className='text-slate-300'>Negative Contribution (- toward Class 0)</span>
             </div>
           </div>
         </div>
@@ -180,7 +180,7 @@ export const ShapExplanation = () => {
                 <span>SHAP Feature Contribution Waterfall (All 13 Clinical Biomarkers)</span>
               </h2>
               <p className='text-xs text-slate-400 mt-0.5'>
-                SHAP contributions explain the model decision score for this input; they do not indicate medical cause.
+                Quantifies each variable's additive force shifting the prediction away from the baseline decision intercept.
               </p>
             </div>
 
@@ -194,6 +194,7 @@ export const ShapExplanation = () => {
             {allShapFeatures.map((feat) => {
               const isPositive = feat.shapValue >= 0;
               const barPercent = Math.min(Math.round((Math.abs(feat.shapValue) / maxAbsValue) * 100), 100);
+              const def = CLINICAL_FEATURE_DEFINITIONS[feat.featureKey] || {};
 
               return (
                 <div 
@@ -248,7 +249,7 @@ export const ShapExplanation = () => {
                   {/* Feature description note on hover or expand */}
                   {activeFeatureKey === feat.featureKey && (
                     <div className='mt-2 p-2 rounded-lg bg-navy-950 border border-slate-800 text-[11px] text-slate-300 font-sans'>
-                      <strong>Model explanation:</strong> {feat.clinicalNote}
+                      <strong>Clinical Context:</strong> {def.tooltip} • {feat.clinicalNote}
                     </div>
                   )}
                 </div>
@@ -258,9 +259,9 @@ export const ShapExplanation = () => {
 
           {/* Axis Scale Indicator */}
           <div className='pt-2 flex justify-between text-[10px] font-mono text-slate-400 border-t border-slate-800/80'>
-            <span>- {maxAbsValue.toFixed(2)} (toward original UCI target 0)</span>
+            <span>- {maxAbsValue.toFixed(2)} (Protective / Absence)</span>
             <span className='text-slate-300 font-bold'>0.00 Baseline</span>
-            <span>+ {maxAbsValue.toFixed(2)} (toward original UCI target 1)</span>
+            <span>+ {maxAbsValue.toFixed(2)} (Risk Factor / Presence)</span>
           </div>
         </div>
 
@@ -282,7 +283,7 @@ export const ShapExplanation = () => {
               </li>
               <li className='flex items-start gap-2'>
                 <span className='text-electric-purple font-bold font-mono mt-0.5'>∑</span>
-                <span><strong>Interpretation:</strong> Contributions explain the model decision score. The score is not a probability, diagnosis, or future event prediction.</span>
+                <span><strong>Additive Decision Function:</strong> The sum of all 13 feature SHAP contributions plus the model intercept equals the final hyperplane decision distance.</span>
               </li>
             </ul>
           </div>

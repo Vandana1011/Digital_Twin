@@ -475,7 +475,7 @@ export const AnatomicalHeart = ({ className = '' }) => {
           <span>Support Vector Classifier (SVC)</span>
         </div>
         <div className='text-cyan-400 font-semibold'>
-          ROC-AUC 0.961
+          ROC-AUC 0.9046 (5-fold CV)
         </div>
       </div>
     </div>
