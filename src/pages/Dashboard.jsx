@@ -139,7 +139,7 @@ export const Dashboard = () => {
                 {MODEL_EVALUATION_METRICS.accuracy}%
               </div>
               <p className='text-[11px] text-[#9496b8] mt-2'>
-                54 of 61 test samples correctly classified in binary evaluation.
+                Mean accuracy across five stratified cross-validation folds.
               </p>
             </div>
 
@@ -184,7 +184,7 @@ export const Dashboard = () => {
                 {MODEL_EVALUATION_METRICS.sampleSize}
               </div>
               <p className='text-[11px] text-[#9496b8] mt-2'>
-                Hold-out test records (20% split of 303 UCI Cleveland subjects).
+                UCI Cleveland records used in the supplied 5-fold evaluation.
               </p>
             </div>
           </div>
@@ -321,7 +321,7 @@ export const Dashboard = () => {
                 Model Performance
               </h3>
               <p className='text-xs text-[#9496b8] mt-1 leading-relaxed'>
-                Review the 2x2 confusion matrix, ROC curve, cross-validation folds, and research limitations.
+                Review cross-validation results and research limitations.
               </p>
               <div className='mt-4 pt-3 border-t border-purple-950/60 text-[11px] font-mono text-emerald-400 font-semibold'>
                 Confusion Matrix & ROC →

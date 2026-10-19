@@ -71,7 +71,7 @@ export const HowItWorks = () => {
         'Maps patient biomarkers into a high-dimensional feature space where healthy and pathological clusters are optimally separated.',
         'Calculates the signed geometric distance (decision margin) from the patient vector to the separating hyperplane.',
       ],
-      clinicalContext: 'Trained and validated on 303 benchmark Cleveland Clinic patients, delivering 88.5% hold-out test accuracy.',
+      clinicalContext: 'The available evaluation reports 5-fold cross-validation on 303 Cleveland dataset records; this is internal research validation, not a held-out clinical test.',
     },
     {
       num: 4,

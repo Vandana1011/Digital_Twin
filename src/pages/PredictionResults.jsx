@@ -157,7 +157,9 @@ export const PredictionResults = () => {
 
             <div className='flex items-center gap-2'>
               <span className='px-3.5 py-1.5 rounded-full text-xs font-mono font-semibold bg-navy-950/80 border border-purple-500/30 text-purple-200 shadow-[0_0_10px_rgba(168,85,247,0.15)]'>
-                Hyperplane Margin: {decisionMargin > 0 ? `+${decisionMargin}` : decisionMargin}
+                Hyperplane Margin: {Number.isFinite(decisionMargin)
+                  ? (decisionMargin > 0 ? `+${decisionMargin}` : decisionMargin)
+                  : 'Unavailable'}
               </span>
             </div>
           </div>
@@ -186,7 +188,7 @@ export const PredictionResults = () => {
                     {isClass1 ? 'Class 1: Presence of Heart Disease' : 'Class 0: Absence of Heart Disease'}
                   </h2>
                   <div className='text-xs font-mono text-slate-300 mt-1'>
-                    {isClass1 
+                    {isClass1
                       ? 'Mapped to original UCI target values 1, 2, 3, or 4 (>=50% diameter stenosis in major vessels)'
                       : 'Mapped to original UCI target value 0 (<50% diameter stenosis in major vessels)'}
                   </div>

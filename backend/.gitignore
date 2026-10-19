@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.py[cod]
+.env
+cardiotwin_artifacts/*.joblib
+!cardiotwin_artifacts/uci_heart_disease_svc_pipeline.joblib
