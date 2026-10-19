@@ -82,11 +82,11 @@ export const Home = () => {
               {/* Evaluation Metrics highlights */}
               <div className='pt-6 border-t border-slate-800/80 grid grid-cols-3 gap-4 text-center lg:text-left'>
                 <div>
-                  <div className='text-2xl font-black font-mono text-cyan-300'>88.5%</div>
+                  <div className='text-2xl font-black font-mono text-cyan-300'>85.46%</div>
                   <div className='text-xs text-slate-400 font-sans'>Model Accuracy</div>
                 </div>
                 <div>
-                  <div className='text-2xl font-black font-mono text-electric-purple'>0.961</div>
+                  <div className='text-2xl font-black font-mono text-electric-purple'>0.9046</div>
                   <div className='text-xs text-slate-400 font-sans'>ROC-AUC Score</div>
                 </div>
                 <div>
@@ -148,7 +148,7 @@ export const Home = () => {
                 Support Vector Classifier (SVC)
               </h3>
               <p className='text-xs sm:text-sm text-slate-400 leading-relaxed mb-4'>
-                Employs a calibrated Support Vector Machine with Radial Basis Function (RBF) kernel, delivering 88.5% classification accuracy and 0.961 ROC-AUC on hold-out evaluation.
+                Uses a saved Support Vector Classifier. Reported stratified 5-fold cross-validation means are 85.46% accuracy and 0.9046 ROC-AUC on the UCI dataset; this is research output, not a clinical assessment.
               </p>
               <div className='text-[11px] font-mono text-electric-purple bg-navy-950/80 px-2.5 py-1.5 rounded-lg border border-slate-800 inline-block'>
                 Binary Decision Hyperplane

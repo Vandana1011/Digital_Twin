@@ -71,6 +71,7 @@ export const PredictionResults = () => {
     inputs,
     topFiveFeatures,
     evaluationSummary,
+    limitations,
   } = assessment;
 
   const isClass1 = predictedClass === 1;
@@ -127,6 +128,11 @@ export const PredictionResults = () => {
 
         {/* Clinical Disclaimer */}
         <Disclaimer variant='banner' />
+        {limitations?.length > 0 && (
+          <ul className='rounded-xl border border-amber-500/30 bg-amber-500/10 px-5 py-3 text-xs text-amber-100 space-y-1'>
+            {limitations.map((limitation) => <li key={limitation}>• {limitation}</li>)}
+          </ul>
+        )}
 
         {/* SECTION 1: PROMINENT RESULT CARD */}
         <div className={`rounded-3xl p-6 sm:p-8 border shadow-2xl relative overflow-hidden backdrop-blur-xl ${
@@ -157,7 +163,7 @@ export const PredictionResults = () => {
 
             <div className='flex items-center gap-2'>
               <span className='px-3 py-1 rounded-full text-xs font-mono font-semibold bg-navy-950/80 border border-slate-700 text-slate-300'>
-                Hyperplane Margin: {decisionMargin > 0 ? `+${decisionMargin}` : decisionMargin}
+                Decision score (not a probability): {decisionMargin > 0 ? `+${decisionMargin.toFixed(3)}` : decisionMargin.toFixed(3)}
               </span>
             </div>
           </div>
@@ -184,12 +190,10 @@ export const PredictionResults = () => {
 
                 <div>
                   <h2 className='text-2xl sm:text-3xl font-extrabold text-white tracking-tight'>
-                    {isClass1 ? 'Class 1: Presence of Heart Disease' : 'Class 0: Absence of Heart Disease'}
+                    {predictedClassLabel}
                   </h2>
                   <div className='text-xs font-mono text-slate-300 mt-0.5'>
-                    {isClass1 
-                      ? 'Mapped to original UCI target values 1, 2, 3, or 4 (>=50% diameter stenosis in major vessels)'
-                      : 'Mapped to original UCI target value 0 (<50% diameter stenosis in major vessels)'}
+                    Original UCI dataset class label returned by the saved model.
                   </div>
                 </div>
               </div>
@@ -210,23 +214,23 @@ export const PredictionResults = () => {
             {/* Hold-Out Validation Context Badge */}
             <div className='lg:col-span-5 bg-navy-950/70 rounded-2xl p-5 border border-slate-800 space-y-3 font-mono text-xs'>
               <div className='text-[11px] font-bold text-slate-300 uppercase tracking-wider pb-2 border-b border-slate-800 flex items-center justify-between'>
-                <span>Model Evaluation Reference</span>
+                <span>Model Evaluation Reference (5-fold CV)</span>
                 <ShieldCheck className='w-4 h-4 text-emerald-400' />
               </div>
               <div className='flex justify-between py-1 border-b border-slate-800/60'>
                 <span className='text-slate-400'>Validation Split:</span>
-                <span className='text-slate-200'>UCI Hold-Out (N=61)</span>
+                <span className='text-slate-200'>Stratified 5-fold cross-validation</span>
               </div>
               <div className='flex justify-between py-1 border-b border-slate-800/60'>
-                <span className='text-slate-400'>Overall Test Accuracy:</span>
+                <span className='text-slate-400'>Mean accuracy:</span>
                 <span className='text-cyan-300 font-bold'>{evaluationSummary.accuracy}</span>
               </div>
               <div className='flex justify-between py-1 border-b border-slate-800/60'>
-                <span className='text-slate-400'>Macro F1-Score:</span>
+                <span className='text-slate-400'>Mean macro F1:</span>
                 <span className='text-slate-200 font-bold'>{evaluationSummary.macroF1}</span>
               </div>
               <div className='flex justify-between py-1'>
-                <span className='text-slate-400'>ROC-AUC:</span>
+                <span className='text-slate-400'>Mean ROC-AUC:</span>
                 <span className='text-electric-purple font-bold'>{evaluationSummary.rocAuc}</span>
               </div>
             </div>
@@ -404,7 +408,7 @@ export const PredictionResults = () => {
                   {predictedClassLabel}
                 </div>
                 <div className='text-xs text-slate-400 mt-1 font-mono'>
-                  Decision Margin: {decisionMargin} • Classifier: Support Vector Machine (RBF)
+                  Decision score (not a probability): {decisionMargin} • Saved SVC model
                 </div>
               </div>
 
