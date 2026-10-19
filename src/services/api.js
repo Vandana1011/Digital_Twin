@@ -249,14 +249,19 @@ export const apiService = {
           : `This contribution moves the model decision score toward ${target}; it does not describe medical causation.`,
       };
     });
+    const predictionLabel = body.label || `Original UCI target ${body.prediction}`;
+    const rawDecisionScore = body.decision_score;
+    const decisionMargin = rawDecisionScore !== null && rawDecisionScore !== undefined && Number.isFinite(Number(rawDecisionScore))
+      ? Number(rawDecisionScore)
+      : null;
     const assessmentResult = {
       id: `CTA-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
       timestamp: body.generated_at || new Date().toISOString(),
       modelName: 'Saved Heart Disease SVC Pipeline',
       predictedClass: body.prediction,
-      predictedClassLabel: body.label,
-      decisionMargin: Number(body.decision_score),
-      shortExplanation: `${body.label}. The signed decision score is not a probability or diagnosis.`,
+      predictedClassLabel: predictionLabel,
+      decisionMargin,
+      shortExplanation: `${predictionLabel}. ${body.note || 'The signed decision score is not a probability or diagnosis.'}`,
       inputs: { ...patientData },
       allShapFeatures,
       topFiveFeatures: allShapFeatures.slice(0, 5),

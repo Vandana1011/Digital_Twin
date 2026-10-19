@@ -157,7 +157,9 @@ export const PredictionResults = () => {
 
             <div className='flex items-center gap-2'>
               <span className='px-3 py-1 rounded-full text-xs font-mono font-semibold bg-navy-950/80 border border-slate-700 text-slate-300'>
-                Hyperplane Margin: {decisionMargin > 0 ? `+${decisionMargin}` : decisionMargin}
+                Hyperplane Margin: {Number.isFinite(decisionMargin)
+                  ? (decisionMargin > 0 ? `+${decisionMargin}` : decisionMargin)
+                  : 'Unavailable'}
               </span>
             </div>
           </div>
