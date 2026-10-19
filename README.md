@@ -30,6 +30,9 @@ CardioTwin serves three independent saved models: a UCI Cleveland heart-disease 
 
 ## Team and submission links
 
+- **Live website:** [CardioTwin AI](https://digital-twin-1-puyp.onrender.com)
+- **Live backend API docs:** [FastAPI Swagger UI](https://cardiotwin-api-vandana.onrender.com/docs)
+- **Live API base URL:** `https://cardiotwin-api-vandana.onrender.com/api/v1`
 - **15–20 minute demo video (unlisted YouTube):** [Add the video URL after uploading]
 - **Presentation (PDF/PPT):** [Add a public link to the presentation]
 - **Architecture diagram (PDF/PPT):** [Add a public link to the exported diagram]
