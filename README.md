@@ -1,5 +1,9 @@
 # CardioTwin AI
 
+<p align="center">
+  <img src="README_assets/member-supplied.jpg" alt="Image shared by a CardioTwin team member" width="310" />
+</p>
+
 CardioTwin is an academic research prototype with a React website and a FastAPI service for three independent ML models: heart disease, diabetes survey, and ECG beat classification. The outputs do not form a combined patient risk score and are not medical advice.
 
 ## Run locally
