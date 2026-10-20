@@ -38,10 +38,10 @@ CardioTwin serves three independent saved models: a UCI Cleveland heart-disease 
 - **Live API base URL:** `https://cardiotwin-api-vandana.onrender.com/api/v1`
 - **15–20 minute demo video (unlisted YouTube):** [Add the video URL after uploading]
 - **Presentation (PDF/PPT):** [Add a public link to the presentation]
-- **Architecture diagram (PDF/PPT):** [Add a public link to the exported diagram]
+- **Architecture diagram (PDF/PPT):** [CardioTwin system architecture](output/pdf/CardioTwin_Architecture.pdf)
 - **Open-source license:** [Choose a license with the team and add its details; no license is currently declared]
 
-> Submission checklist: add the demo video, presentation, architecture export, and license details before submitting. The current repository contains a Mermaid architecture diagram in Markdown, not a PDF/PPT export. The heart model artifact is included; ECG and diabetes model binaries still need separate distribution. Verify that every linked file is publicly accessible without extra permissions.
+> Submission checklist: add the demo video, presentation, and license details before submitting. The architecture diagram is available as a PDF export. The heart model artifact is included; ECG and diabetes model binaries still need separate distribution. Verify that every linked file is publicly accessible without extra permissions.
 
 ## Run locally
 
