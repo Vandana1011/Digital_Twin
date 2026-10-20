@@ -36,12 +36,12 @@ CardioTwin serves three independent saved models: a UCI Cleveland heart-disease 
 - **Live website:** [CardioTwin AI](https://digital-twin-six-sandy.vercel.app)
 - **Live backend API docs:** [FastAPI Swagger UI](https://cardiotwin-api-vandana.onrender.com/docs)
 - **Live API base URL:** `https://cardiotwin-api-vandana.onrender.com/api/v1`
-- **15–20 minute demo video (unlisted YouTube):** [Add the video URL after uploading]
+- **Demo video (Unlisted YouTube, 9:12):** [CardioTwin AI](https://youtu.be/_wao2nqznKA)
 - **Presentation (PPTX):** [CardioTwin project presentation](output/presentations/CardioTwin_Project_Presentation_NoSpeakerNotes.pptx)
 - **Architecture diagram (PDF/PPT):** [CardioTwin system architecture](output/pdf/CardioTwin_Architecture.pdf)
 - **Open-source license:** [Choose a license with the team and add its details; no license is currently declared]
 
-> Submission checklist: add the demo video, presentation, and license details before submitting. The architecture diagram is available as a PDF export. The heart model artifact is included; ECG and diabetes model binaries still need separate distribution. Verify that every linked file is publicly accessible without extra permissions.
+> Submission checklist: the demo video and presentation are linked. The demo is 9:12; if the competition enforces its 15–20 minute requirement, replace it with a longer recording. The open-source license still needs to be agreed and added. The architecture diagram is available as a PDF export. The heart model artifact is included; ECG and diabetes model binaries still need separate distribution. Verify that every linked file is publicly accessible without extra permissions.
 
 ## Run locally
 
