@@ -6,8 +6,11 @@
 
 ## Team and institution
 
-- **Team members:** [Add each member's full name and role]
-- **College/incubator:** [Add the official institution name]
+- **Team members:**
+  - Samrin Shaik — Dataset and Machine Learning
+  - Mohammed Faisal — Frontend and UI/UX Design
+  - Vandana Vajji — Backend, Integration and Documentation
+- **Institution:** Independent student team; no college or incubator affiliation.
 
 ## Problem statement
 
@@ -30,7 +33,7 @@ CardioTwin serves three independent saved models: a UCI Cleveland heart-disease 
 
 ## Team and submission links
 
-- **Live website:** [CardioTwin AI](https://digital-twin-1-puyp.onrender.com)
+- **Live website:** [CardioTwin AI](https://digital-twin-six-sandy.vercel.app)
 - **Live backend API docs:** [FastAPI Swagger UI](https://cardiotwin-api-vandana.onrender.com/docs)
 - **Live API base URL:** `https://cardiotwin-api-vandana.onrender.com/api/v1`
 - **15–20 minute demo video (unlisted YouTube):** [Add the video URL after uploading]
@@ -38,7 +41,7 @@ CardioTwin serves three independent saved models: a UCI Cleveland heart-disease 
 - **Architecture diagram (PDF/PPT):** [Add a public link to the exported diagram]
 - **Open-source license:** [Choose a license with the team and add its details; no license is currently declared]
 
-> Submission checklist: replace the team, institution, demo, presentation, architecture export, and license placeholders above before submitting. The current repository contains a Mermaid architecture diagram in Markdown, not a PDF/PPT export. The heart model artifact is included; ECG and diabetes model binaries still need separate distribution. Verify that every linked file is publicly accessible without extra permissions.
+> Submission checklist: add the demo video, presentation, architecture export, and license details before submitting. The current repository contains a Mermaid architecture diagram in Markdown, not a PDF/PPT export. The heart model artifact is included; ECG and diabetes model binaries still need separate distribution. Verify that every linked file is publicly accessible without extra permissions.
 
 ## Run locally
 
