@@ -37,7 +37,7 @@ CardioTwin serves three independent saved models: a UCI Cleveland heart-disease 
 - **Live backend API docs:** [FastAPI Swagger UI](https://cardiotwin-api-vandana.onrender.com/docs)
 - **Live API base URL:** `https://cardiotwin-api-vandana.onrender.com/api/v1`
 - **15–20 minute demo video (unlisted YouTube):** [Add the video URL after uploading]
-- **Presentation (PDF/PPT):** [Add a public link to the presentation]
+- **Presentation (PPTX):** [CardioTwin project presentation](output/presentations/CardioTwin_Project_Presentation_NoSpeakerNotes.pptx)
 - **Architecture diagram (PDF/PPT):** [CardioTwin system architecture](output/pdf/CardioTwin_Architecture.pdf)
 - **Open-source license:** [Choose a license with the team and add its details; no license is currently declared]
 
@@ -86,3 +86,5 @@ The saved heart SVC pipeline is included at `backend/cardiotwin_artifacts/uci_he
 ## Limitations
 
 The heart endpoint classifies the original UCI dataset label; it does not predict a future heart attack. Its decision score is not a probability. SHAP contributions explain model output and do not establish medical causation. The prototype has no database and does not persist requests or predictions. Use synthetic demo values only.
+
+
