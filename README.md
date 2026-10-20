@@ -1,5 +1,10 @@
 # CardioTwin AI
 
+## License
+
+This project is licensed under the [MIT License](LICENSE). See the LICENSE file for permissions and conditions.
+
+
 ## Project title
 
 **CardioTwin AI — Heart Health Digital Twin Prototype**
@@ -39,9 +44,9 @@ CardioTwin serves three independent saved models: a UCI Cleveland heart-disease 
 - **Demo video (Unlisted YouTube, 9:12):** [CardioTwin AI](https://youtu.be/_wao2nqznKA)
 - **Presentation (PPTX):** [CardioTwin project presentation](output/presentations/CardioTwin_Project_Presentation_NoSpeakerNotes.pptx)
 - **Architecture diagram (PDF/PPT):** [CardioTwin system architecture](output/pdf/CardioTwin_Architecture.pdf)
-- **Open-source license:** [Choose a license with the team and add its details; no license is currently declared]
+- **Open-source license:** [MIT License](LICENSE) — use, modification, and redistribution are permitted under its terms.
 
-> Submission checklist: the demo video and presentation are linked. The demo is 9:12; if the competition enforces its 15–20 minute requirement, replace it with a longer recording. The open-source license still needs to be agreed and added. The architecture diagram is available as a PDF export. The heart model artifact is included; ECG and diabetes model binaries still need separate distribution. Verify that every linked file is publicly accessible without extra permissions.
+> Submission checklist: the demo video and presentation are linked. The demo is 9:12; if the competition enforces its 15–20 minute requirement, replace it with a longer recording. The MIT License is in the repository root as `LICENSE` and is linked above. The architecture diagram is available as a PDF export. The heart model artifact is included; ECG and diabetes model binaries still need separate distribution. Verify that every linked file is publicly accessible without extra permissions.
 
 ## Run locally
 
